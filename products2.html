@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <title>JSON Page</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <style>
+        h2{color:#ff0000}
+        p#price{font-weight: bold;}
+        .display{width:30%; text-align: left;}
+    </style>
+    </head>
+    <body>
+        <script language="javascript">
+            $.getJSON("https://johnec115.github.io/hw6/products.json", 
+			function( data ) {
+				str = JSON.stringify(data);
+                parsed = JSON.parse(str);
+                NUM_PRODUCTS = Object.keys(parsed).length;
+                obj= [];
+                cat=[];
+                for(i = 1; i < NUM_PRODUCTS + 1; i++){
+                    prod = "product" + i;
+                    obj.push(parsed[prod]);
+                }
+                len = obj.length;
+                for(i=0; i < len; i++){
+                    $("#json-list").append("<h2>" + obj[i].name + "</h2>");
+                    $("#json-list").append("<p>" + obj[i].description + "</p>");
+                    $("#json-list").append("<p id = price>Price: $" + obj[i].price + "</p>");
+                    $("#json-list").append("<p>Categories: " + obj[i].categories + "</p>")
+                }
+	        })
+        </script>
+	    <div id="json-list" class = "display">&nbsp;</div>
+
+    </body>
+</html>

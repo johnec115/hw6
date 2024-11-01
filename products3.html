@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>JSON Page</title>
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <style>
+            .items{display: inline-block;border:1px solid#000000;margin:3px;}
+        </style>
+    </head>
+    <body>
+        <h1>Search for a Product by Category</h1>
+        <script>
+            $.getJSON("https://johnec115.github.io/hw6/products.json", 
+			function( data ) {
+				str = JSON.stringify(data);
+                parsed = JSON.parse(str);
+                NUM_PRODUCTS = Object.keys(parsed).length;
+                obj= [];
+                cat=[];
+                for(i = 1; i < NUM_PRODUCTS + 1; i++){
+                    prod = "product" + i;
+                    obj.push(parsed[prod]);
+                    cats = obj[i-1].categories.length;
+                    for(j = 0; j < cats; j++){
+                        if(cat.indexOf(obj[i-1].categories[j]) < 0){
+                            cat.push(obj[i-1].categories[j]);
+                        }
+                    }
+                }
+                select = document.getElementById("dropdown");
+                catLength = cat.length;
+                for(i=0; i < catLength; i++){
+                    opt = cat[i];
+                    elem = document.createElement("option");
+                    elem.textContent = opt;
+                    elem.value = opt;
+                    select.appendChild(elem);
+                }
+                
+                $(document).ready(function(){
+                    $('#filter').click(function(){
+                        strin="";
+                        category = $("#dropdown").val();
+                        for(i = 0; i <NUM_PRODUCTS; i++){
+                            if(obj[i].categories.indexOf(category) >= 0){
+                                strin += "<p>" + obj[i].name + "</p>";
+                            }
+                        }
+                        $("#items").html(strin);
+                    })
+                })
+                
+	        })
+        </script>
+        <form>
+            <label>Pick a Category</label>
+            <select name="category" id="dropdown">
+                <option value=""></option>
+            </select>
+            <input type = "button" value = "Filter" id="filter">
+        </form>
+        <div id="items" class="items">
+        </div>
+    </body>
+</html>
